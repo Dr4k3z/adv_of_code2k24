@@ -1,6 +1,9 @@
+import sys
+sys.path.append('..')
+
 import heapq
 from collections import Counter
-import time
+from utils import execution_time
 
 def check_distance(list1,list2):
     heapq.heapify(list1)
@@ -23,6 +26,9 @@ def similarity(list1,list2):
 
 
 def part1():
+    """
+        Avg execution time: 10^-3 s
+    """
     with open('input.txt') as inputfile:
         data = inputfile.read().split('\n')
 
@@ -35,6 +41,9 @@ def part1():
     
 
 def part2():
+    """
+        Avg execution time: 10^-3 s
+    """
     with open('input.txt') as inputfile:
         data = inputfile.read().split('\n')
 
@@ -47,19 +56,5 @@ def part2():
     
 
 if __name__ == '__main__':
-    p1_times = [0]*10
-    for i in range(10):
-        begin = time.time()
-        part1()
-        end = time.time()
-        p1_times.append(end-begin)
-
-    p2_times = [0]*10
-    for i in range(10):
-        begin = time.time()
-        part2()
-        end = time.time()
-        p2_times.append(end-begin)
-
-    print(f'Part One execution time: {sum(p1_times)/10}')
-    print(f'Part Two execution time: {sum(p2_times)/10}')
+    print(f'Part One execution time: {execution_time(part1)}')
+    print(f'Part Two execution time: {execution_time(part2)}')
