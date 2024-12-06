@@ -1,6 +1,6 @@
 import sys
 sys.path.append('..')
-from utils import execution_time
+from utils import execution_time,save_output
 
 def stable(level) -> bool:
     if not( level == sorted(level) or level == sorted(level, reverse=True) ):
@@ -60,3 +60,4 @@ if __name__ == '__main__':
     part2_time = execution_time(part2)
     print(f'Part One execution time: {part1_time}')
     print(f'Part One execution time: {part2_time}')
+    save_output(new_row=[part1_time, part2_time])

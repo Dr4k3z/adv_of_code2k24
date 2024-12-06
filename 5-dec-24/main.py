@@ -1,6 +1,6 @@
 import sys
 sys.path.append('..')
-from utils import execution_time, read_input
+from utils import *
 from collections import defaultdict
 from functools import cmp_to_key
 
@@ -68,3 +68,5 @@ if __name__ == '__main__':
     part2_time = execution_time(part2)
     print(f'Part One execution time: {part1_time}')
     print(f'Part One execution time: {part2_time}')
+
+    save_output(new_row=[part1_time, part2_time])

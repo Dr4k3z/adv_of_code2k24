@@ -1,4 +1,7 @@
+import sys
+sys.path.append('..')
 import re
+from utils import execution_time,save_output
 
 """
     I hate regex
@@ -50,5 +53,7 @@ def part2(filename='input.txt'):
     print(f'Total = {total}')
 
 if __name__=='__main__':
-    part1()
-    part2(filename='input.txt')
+    part1_time = execution_time(part1)
+    part2_time = execution_time(part2)
+
+    save_output(new_row=[part1_time, part2_time])

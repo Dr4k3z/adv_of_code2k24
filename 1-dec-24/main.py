@@ -3,7 +3,7 @@ sys.path.append('..')
 
 import heapq
 from collections import Counter
-from utils import execution_time
+from utils import execution_time,save_output
 
 def check_distance(list1,list2):
     heapq.heapify(list1)
@@ -56,5 +56,8 @@ def part2():
     
 
 if __name__ == '__main__':
-    print(f'Part One execution time: {execution_time(part1)}')
-    print(f'Part Two execution time: {execution_time(part2)}')
+    part1_time = execution_time(part1)
+    part2_time = execution_time(part2)
+    print(f'Part One execution time: {part1_time}')
+    print(f'Part Two execution time: {part2_time}')
+    save_output(new_row=[part1_time, part2_time])
