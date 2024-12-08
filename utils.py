@@ -31,7 +31,7 @@ def save_output(file_path='../README.md', new_row=[0.0,0.0]):
     
     for i, line in enumerate(lines):
         if line.startswith("|") and not line.strip().startswith("|---"):
-            lines.insert(i + 1, "| " + " | ".join(new_row) + " |\n")
+            lines.insert(i + 2, "| " + " | ".join(new_row) + " |\n")
             break
 
     with open(file_path, "w") as file:
