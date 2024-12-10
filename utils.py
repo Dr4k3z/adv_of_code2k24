@@ -12,11 +12,16 @@ def execution_time(func, n_samples : int = 10):
 
     return sum(times)/n_samples
 
-def read_input(filename='input.txt'):
+def read_input(filename='input.txt', to_int=False):
     lines = []
     with open(filename) as file:
         for line in file:
-            lines.append(line.strip())
+            if to_int:
+                stripped = line.strip()
+                stripped = [int(c) for c in stripped]
+                lines.append(stripped)
+            else:
+                lines.append(line.strip())
     return lines
 
 def save_output(file_path='../README.md', new_row=[0.0,0.0]):
