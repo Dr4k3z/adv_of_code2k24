@@ -1,8 +1,9 @@
 import sys
 sys.path.append('..')
-from math import log2
+import time
 from functools import lru_cache
-from utils import read_input
+from utils import read_input,save_output
+from collections import defaultdict
 
 @lru_cache(maxsize=None)
 def toBinary(num : str) -> str:
@@ -57,7 +58,7 @@ def evolve(secret_num : str) -> str:
     return secret_num
 
 def part1():
-    data = read_input('example.txt')
+    data = read_input('input.txt')
     total = 0 
     for i,num in enumerate(data):
         secret_num = toBinary(num)
@@ -66,37 +67,55 @@ def part1():
         for _ in range(N):
             secret_num = evolve(secret_num)
 
-        print(f'Done with {i+1}')
+        #print(f'Done with {i+1}')
 
         total += int(secret_num,2)
 
-    print(f'Total = {total}')
+    #print(f'Total = {total}')
 
 def part2():
-    data = read_input('example2.txt')
-    #prices = { i : [int(row[-1])] for i,row in enumerate(data)}
+    # cant brute force part 2
+    data = read_input('input.txt')
+    prices_path = { i : [int(row[-1])] for i,row in enumerate(data)}
 
-    secret_num = toBinary(data[0])
-    prices = [int(data[0][-1])]
-    N = 2000
-    for _ in range(N):
-        secret_num = evolve(secret_num)
-        prices.append(int(str(int(secret_num,2))[-1]))
+    for i in range(len(data)):
+        secret_num = toBinary(data[i])
 
-    diff = [b-a for a,b in zip(prices,prices[1:])]
+        N = 2000
+        for _ in range(N):
+            secret_num = evolve(secret_num)
+            prices_path[i].append(int(str(int(secret_num,2))[-1]))
+
+    #print('done with price history')
+
+    diff = {i : [b-a for a,b in zip(prices_path[i],prices_path[i][1:])] for i in prices_path}
+    sequence_results = defaultdict(lambda: defaultdict(int))
+    for initial,changes in diff.items():
+        sequences_seen = set() 
+        for i in range(len(changes) - 4 + 1):
+            current_sequence = tuple(changes[i:i + 4])
+            if current_sequence not in sequences_seen:
+                sequences_seen.add(current_sequence)
+                resulting_price = prices_path[initial][i + 4]
+                sequence_results[current_sequence][initial] = resulting_price
     
-    while prices:
-        M = max(prices)
-        M_idx = prices.index(M)
-
-        if M_idx >= 4:
-            print(f'{M} - {diff[M_idx-3:M_idx+1]}')
-            break
-        else:
-            prices.remove(M)
-
-
+    best_sequence = None
+    max_bananas = 0
+    
+    for sequence, results in sequence_results.items():
+        total = sum(results[initial] for initial in prices_path.keys())
+        if total > max_bananas:
+            max_bananas = total
+            best_sequence = sequence
+    
+    return list(best_sequence), max_bananas
 
 if __name__ == '__main__':
-    #part1()
-    part2()
+    start = time.time()
+    part1()
+    part1_time = time.time() - start
+    start = time.time()
+    seq,gain = part2()
+    part2_time = time.time() - start
+
+    save_output(new_row=[part1_time,part2_time])
