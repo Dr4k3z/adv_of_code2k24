@@ -3,7 +3,7 @@ sys.path.append('..')
 import re
 from collections import defaultdict,deque
 from itertools import combinations
-from utils import read_input
+from utils import read_input,execution_time,save_output
 
 def parse_input(data):
     variables = defaultdict(int)
@@ -18,20 +18,20 @@ def parse_input(data):
 
     return variables, operations
 
-def find_string(gates, operations, output=None):
+def part1():
+    data = read_input('input.txt')
+
+    gates, operations = parse_input(data)
+    
     func_dict = {
-        'AND': lambda x, y: x & y,
-        'OR': lambda x, y: x | y,
-        'XOR' : lambda x, y: x ^ y
-    }
+            'AND': lambda x, y: x & y,
+            'OR': lambda x, y: x | y,
+            'XOR' : lambda x, y: x ^ y
+        }
 
     queue = deque()
     for operation in operations:
-        # very very ugly
-        if output:
-            inputs,_ = operation.split(' -> ')
-        else:
-            inputs,output = operation.split(' -> ')
+        inputs,output = operation.split(' -> ')
 
         gate1,gate2 = inputs[0:3],inputs[-3:]
 
@@ -56,40 +56,8 @@ def find_string(gates, operations, output=None):
             final_nums.append((num, gates[key]))
 
     final_nums = sorted(final_nums, key=lambda x: x[0], reverse=True)
-    ans = [str(f[1]) for f in final_nums]
-    return int(''.join(ans),2)
-
-def part1():
-    data = read_input('input.txt')
-
-    gates, operations = parse_input(data)
-    return find_string(gates, operations)
-
-def part2():
-    data = read_input('example3.txt')
-
-    gates, operations = parse_input(data)
-    outputs = [op.split(' -> ')[1] for op in operations]
-
-    x,y = '',''
-    for key,val in gates.items():
-        if 'x' in key:
-            x += str(val)
-        elif 'y' in key:
-            y += str(val)
-
-    target = int(x,2)+int(y,2)
-
-    for a, b, c, d in combinations(outputs, 4):
-        gates_copy = gates.copy()
-        gates_copy[a], gates_copy[b], gates_copy[c], gates_copy[d] = gates_copy[d], gates_copy[c], gates_copy[b], gates_copy[a]
-        result = find_string(gates_copy, operations)
-        if result == target:
-            print(f"Swapping {a}, {b}, {c}, and {d} results in the target value.")
-            return
-    print("No combination of swaps results in the target value.")
-    
-
+    return [str(f[1]) for f in final_nums]
 
 if __name__ == "__main__":
-    part2()
+    part1_time = execution_time(part1)
+    save_output(new_row=[part1_time,'N/A'])
