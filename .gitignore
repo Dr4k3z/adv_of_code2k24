@@ -163,4 +163,4 @@ cython_debug/
 
 # Advent of Code
 input.txt
-gpt.py
+gpt*.py
